@@ -31,7 +31,7 @@ static void wfs_initDeviceParams_exit_hook(trampoline_state *regs){
     void *server_handle = sal_device->server_handle;
     debug_printf("wfs_initDeviceParams_exit_hook server_handle: %p\n", server_handle);
     if(server_handle == usb_first_server_handle) {
-        wfs_device->crypto_key_handle = WFS_KEY_HANDLE_USB;
+        wfs_device->crypto_key_handle = WFS_KEY_HANDLE_NOCRYPTO;
     }
 }
 
