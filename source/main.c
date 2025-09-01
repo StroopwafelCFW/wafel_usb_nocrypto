@@ -14,7 +14,7 @@
 #include "sal.h"
 #include "wfs.h"
 
-static void *usb_first_server_handle = 0;
+static void *usb_first_server_handle = (void*) 0xFFFFFFFF;
 static void ums_attach_hook(trampoline_state *regs){
     static bool first = true;
     if(!first)
