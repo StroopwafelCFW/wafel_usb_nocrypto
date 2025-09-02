@@ -161,6 +161,8 @@ SECTIONS
 		__heap_start = .;
 		. += 0x10000;
 		__heap_end = .;
+
+		. = ALIGN(4);
 		__bss_end__ = .;
 	} : data
 
