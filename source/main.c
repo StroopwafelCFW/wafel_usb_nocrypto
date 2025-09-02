@@ -14,14 +14,14 @@
 #include "sal.h"
 #include "wfs.h"
 
-static void *usb_first_server_handle = (void*) 0xFFFFFFFF;
+static void *usb_first_server_handle;
+static bool usb_handle_set = 0;
 static void ums_attach_hook(trampoline_state *regs){
-    static bool first = true;
-    if(!first)
+    if(usb_handle_set)
         return;
-    first = false;
     FSSALAttachDeviceArg *attach_arg = (FSSALAttachDeviceArg*)regs->r[0];
     usb_first_server_handle = attach_arg->server_handle;
+    usb_handle_set = true;
     debug_printf("usb_first_server_handle: %p\n", usb_first_server_handle);
 }
 
@@ -30,7 +30,7 @@ static void wfs_initDeviceParams_exit_hook(trampoline_state *regs){
     FSSALDevice *sal_device = FSSAL_LookupDevice(wfs_device->handle);
     void *server_handle = sal_device->server_handle;
     debug_printf("wfs_initDeviceParams_exit_hook server_handle: %p\n", server_handle);
-    if(server_handle == usb_first_server_handle) {
+    if(usb_handle_set && server_handle == usb_first_server_handle) {
         wfs_device->crypto_key_handle = WFS_KEY_HANDLE_NOCRYPTO;
     }
 }
